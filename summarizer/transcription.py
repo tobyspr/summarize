@@ -110,9 +110,9 @@ def transcribe_audio(
 def _transcribe_cloud_whisper(
     audio_path: str, verbose: bool, language: str = "auto"
 ) -> str:
-    api_key = os.getenv("groq")
+    api_key = os.getenv("GROQ_API_KEY") or os.getenv("groq")
     if not api_key:
-        raise APIKeyError("Groq API key not found in environment (set 'groq' in .env)")
+        raise APIKeyError("Groq API key not found in environment (set GROQ_API_KEY in .env)")
 
     spinner = ProgressSpinner("Transcribing audio with Groq API", verbose)
     try:
