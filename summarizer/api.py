@@ -230,10 +230,12 @@ async def process_chunk(
     }
 
     messages = _build_messages(chunk, template, config)
+    # OpenAI's GPT-5+ models reject max_tokens; other OpenAI-compatible APIs expect it.
+    token_param = "max_completion_tokens" if "api.openai.com" in config["base_url"] else "max_tokens"
     data = {
         "model": config["model"],
         "messages": messages,
-        "max_tokens": config["max_output_tokens"]
+        token_param: config["max_output_tokens"]
     }
 
     for attempt in range(max_retries):
